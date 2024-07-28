@@ -1,4 +1,4 @@
-import { View, StyleSheet, Text ,Button } from "react-native";
+import { View, StyleSheet, Text ,Button, TouchableOpacity } from "react-native";
 import { SafeAreaView } from "react-native-safe-area-context";
 import MyInput from "@/components/TextInput";
 import { useState } from "react";
@@ -6,6 +6,7 @@ import { FIREBASE_APP } from "@/config";
 import { getFirestore, setDoc, doc } from "firebase/firestore"
 import { getStorage, ref, uploadBytes, getDownloadURL, UploadResult  } from "firebase/storage"
 import PickerImage from "@/components/PickerImage";
+import { router } from "expo-router";
 
 const HomeScreen = () => {
     const [tenHang, setTenHang] = useState<string>("")
@@ -23,8 +24,10 @@ const HomeScreen = () => {
             // validate
             return;
         }
-
-        const newProduct = doc(getFirestore(FIREBASE_APP), "product", "123")
+        const ran = (): string => {
+            return Math.random()+""
+        }
+        const newProduct = doc(getFirestore(FIREBASE_APP), "product", ran())
 
         try {
             await setDoc(newProduct, {
@@ -67,8 +70,10 @@ const HomeScreen = () => {
             <PickerImage image={image} callback={setImage} uploadImage={uploadImage}  />
             <MyInput label="Mô tả" placeholder="Nhập Mô tả" callback={(changeInput) => setMoTa(changeInput)} value={mota} />
 
-            <Button title="OK" onPress={() => handleOK()} /> 
+            <Button title="OK" onPress={() => handleOK()} />
+            <Button title="Product" onPress={() => router.push("/product")} />  
         </View> 
+        
         </SafeAreaView>
     )
 }
